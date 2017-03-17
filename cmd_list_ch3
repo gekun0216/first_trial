@@ -1,0 +1,15 @@
+# branch
+
+git branch <branch_name>
+
+# switch to branch_name
+git checkout <branch_name>
+
+# create and switch to branch_name
+git checkout -b <branch_name>
+
+# See what commit is associated with what branch, the first several lines of
+# this output
+git log --oneline --decorate
+
+git log --oneline --decorate --graph --all
