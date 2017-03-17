@@ -75,8 +75,33 @@ git remote add <short name> <url>
 
 git remote show [remote_name]
 
+# Just change the remote's short name
+git remote rename [old_remote_name] [new_remote_name]
+
+# dissociate?
+git remote rm [remote_name]
+
 git fetch [remote_short_name]
 
 git pull
 
 git push [remote_name] [branch_name]
+
+git tag
+
+git tag -l<pattern>
+
+# create a lightweight tag
+git tag <tag_name> [commit_sha]
+
+# create a annotated tag
+git tag -a <tag_name> -m <tag_description> [commit_sha]
+
+# delete tag 
+git tag -d <tag_name>
+
+git checkout -b <branch_name> [tagname]
+
+git push origin <tag_name>
+
+git push origin --tags
