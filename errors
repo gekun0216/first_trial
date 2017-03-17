@@ -1,0 +1,5 @@
+1. error: The requested URL returned error: 403 Forbidden while accessing https://github.com/JinTao-IDarex/test.git/info/refs
+resolve: change .git/config, add github account name before DNS.
+
+2. (gnome-ssh-askpass:3530): Gtk-WARNING **: cannot open display:
+unset SSH_ASKPASS

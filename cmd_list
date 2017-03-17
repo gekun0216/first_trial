@@ -36,6 +36,9 @@ git commit -m
 # staging modification before commit
 git commit -a
 
+# replace the previous commit
+git commit --amend
+
 # rm from staging and also working dir, and then commit will rm from snapshot.
 git rm
 
@@ -61,3 +64,21 @@ git log --pretty=oneline --graph
 
 # limited options
 git log --since | --until | --author | --grep | -S
+
+# manage remote project
+git remote
+
+# verbose version
+git remove -v
+
+git remote add <short name> <url>
+
+git remote show [remote_name]
+
+git fetch [remote_short_name]
+
+git pull
+
+git push [remote_name] [branch_name]
+
+
