@@ -35,3 +35,29 @@ git commit -m
 
 # staging modification before commit
 git commit -a
+
+# rm from staging and also working dir, and then commit will rm from snapshot.
+git rm
+
+# Only rm from staging, to make the file untracked
+git rm --cached
+
+# equavalent to: mv file1 file2; git rm file1; git add file2;
+git mv
+
+git log
+
+# -p (patches?), -2, show the latest two commits. 
+git log -p -2
+
+# abbreviated stats for each commit
+git log --stat
+
+# options can be oneline | short | full | fuller | format
+git log --pretty=options
+
+# Show branch and merge history
+git log --pretty=oneline --graph
+
+# limited options
+git log --since | --until | --author | --grep | -S
