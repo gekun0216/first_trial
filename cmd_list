@@ -25,3 +25,13 @@ git diff --cached
 
 # empty commit message means abortion
 git commit
+
+# make automated commit message more specific by adding info provided by 
+# git diff
+git commit -v
+
+# inline commit message
+git commit -m
+
+# staging modification before commit
+git commit -a
