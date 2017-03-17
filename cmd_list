@@ -1,0 +1,27 @@
+git clone
+
+# start to track the untracked file.
+# stage the changes, multiple-times.
+git add
+
+git status
+
+# -s short output
+git status -s
+git status --short
+
+# ? modified means modify something already in snapshot.
+# ? new means newly added to staging area. 
+
+# without no arg, diff the changes what you've made in the working dir but not
+# staged yet.
+git diff
+
+# diff between staged and last commit.
+git diff --staged
+
+# diff what we've staged so far.
+git diff --cached
+
+# empty commit message means abortion
+git commit
