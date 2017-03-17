@@ -80,8 +80,3 @@ git fetch [remote_short_name]
 git pull
 
 git push [remote_name] [branch_name]
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 0f0454499d8d859a3415c9142ef07821e6977420
