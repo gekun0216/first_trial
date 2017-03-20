@@ -1,6 +1,10 @@
 # branch
 
+# create a branch
 git branch <branch_name>
+
+# list the branch names with the last commit SHA for each.
+git branch -v
 
 # switch to branch_name
 git checkout <branch_name>
