@@ -17,8 +17,46 @@ git checkout <branch_name>
 # create and switch to branch_name
 git checkout -b <branch_name>
 
-# See what commit is associated with what branch, the first several lines of
+# see what commit is associated with what branch, the first several lines of
 # this output.
 git log --oneline --decorate
 
 git log --oneline --decorate --graph --all
+
+# how to push your local branch to remote
+# git automatically expands "some_branch" out to 
+# "refs/heads/some_branch:refs/heads/some_branch"
+git push origin some_branch
+
+# push local some_branch to remote with name other_branch
+git push origin some_branch:other_branch
+
+# this can add origin/some_branch pointer and related data
+git fetch origin
+# create local/tracking some_branch 
+git checkout -b some_branch origin/some_branch
+
+# add new remote
+git remote add remote_name remote_url
+# fetch all the data of the remote
+git fetch remote_name
+# fetch from all the remotes
+git fetch --all
+
+# delete remote branch
+git push remote_name --delete remote_branch
+
+# tracking branch
+# create tracking branch: remote_branch
+git checkout --track remote/remote_branch
+# create tracking branch: tracking_branch
+git checkout -b tracking_branch remote/remote_branch
+# set an existing local branch as tracking branch of remote/remote_branch
+git branch -u remote/remote_branch
+
+# If you don't want to type the pwd every time you connect to remote
+git config --global credential.helper cache
+
+# 
+git branch -vv
+
