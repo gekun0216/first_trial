@@ -60,3 +60,65 @@ git config --global credential.helper cache
 # 
 git branch -vv
 
+# git rebase..
+$ git log --oneline --decorate --graph --all
+* 7854eb7 (master) a change to first.sh on master
+| * 7821b14 (HEAD, ch3) a change to first.sh
+| * 93791b6 a bunch of changes to cmd_list_ch3
+|/  
+* 7bc7193 make a change to ch3_v2
+# try to rebase, set current master pointer(7854eb7) as ch3's new base
+$ git checkout ch3
+Switched to branch 'ch3'
+
+$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: a bunch of changes to cmd_list_ch3
+Applying: a change to first.sh
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging first.sh
+CONFLICT (content): Merge conflict in first.sh
+Failed to merge in the changes.
+Patch failed at 0002 a change to first.sh
+
+When you have resolved this problem run "git rebase --continue".
+If you would prefer to skip this patch, instead run "git rebase --skip".
+To restore the original branch and stop rebasing run "git rebase --abort".
+
+$ git branch
+* (no branch)
+  ch3
+  master
+
+# resolve conflicts if any
+$ git add .
+
+# rebase again
+$ git rebase master
+Current branch ch3 is up to date.
+
+$ git log --oneline --decorate --graph --all
+* 7016597 (HEAD, ch3) a change to first.sh
+* 014892a a bunch of changes to cmd_list_ch3
+* 7854eb7 (master) a change to first.sh on master
+* 7bc7193 make a change to ch3_v2
+* 035bf0d some change in cmd_list_ch3
+
+$ git checkout master
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 4 commits.
+
+$ git merge ch3
+Updating 7854eb7..7016597
+Fast-forward
+ cmd_list_ch3 |   40 +++++++++++++++++++++++++++++++++++++++-
+ first.sh     |    2 +-
+ 2 files changed, 40 insertions(+), 2 deletions(-)
+
+$ git log --oneline --decorate --graph --all
+* 7016597 (HEAD, master, ch3) a change to first.sh
+* 014892a a bunch of changes to cmd_list_ch3
+* 7854eb7 a change to first.sh on master
+* 7bc7193 make a change to ch3_v2
+* 035bf0d some change in cmd_list_ch3
