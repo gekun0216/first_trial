@@ -8,4 +8,4 @@ echo "merge change 1/2 for master and ch3"
 
 echo "merge change for master and ch3, again"
 
-echo "merge change for master and ch3, again*2"
+echo "merge change for master and ch3, again*3"
