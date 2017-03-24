@@ -6,4 +6,4 @@ echo "make anohter change on master branch, again"
 
 echo "merge change 1/2 for master and ch3"
 
-echo "change on master, again"
+echo "change first.sh on master, again*2"
