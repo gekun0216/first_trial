@@ -7,3 +7,4 @@ echo "make anohter change on master branch, again"
 echo "merge change 1/2 for master and ch3"
 
 echo "change1 on ch3"
+echo "change2 on ch3"
