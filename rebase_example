@@ -1,0 +1,214 @@
+#/bin/sh
+
+# a git rebase example, 
+
+### 
+# [gekun]: the less conflict, the better/faster 
+# replay: apply the commits one by one, in the commited order
+# halt if meeting conflict, resolve and continue
+# a temporary branch used by rebase, it can be seen if there is an conflict.
+### 
+
+# initially, master and ch3 have the same start/base commit
+
+# change first.sh twice, while second.sh once, on master branch
+[gekun@gekun first_trial]$ git commit -a -m "change 3 on first.sh on master"
+[gekun@gekun first_trial]$ git commit -a -m "change 4 on first.sh on master"
+[gekun@gekun first_trial]$ git commit -a -m "change 5 on second.sh on master"
+
+[gekun@gekun first_trial]$ git log --oneline --decorate --graph --all -6
+* 216f8e3 (HEAD, master) change 5 on second.sh on master
+* 62f3375 change 4 on first.sh on master
+* 474f26a change 3 on first.sh on master
+* 99fdfb3 (origin/master, origin/HEAD, ch3) change on ch3, again
+
+[gekun@gekun first_trial]$ cat -n first.sh 
+     1	echo "hello world"
+     2	
+     3	echo "change something else after the first line"
+     4	
+     5	echo "make anohter change on master branch, again"
+     6	
+     7	echo "merge change 1/2 for master and ch3"
+     8	
+     9	echo "merge change for master and ch3, again"
+    10	
+    11	echo "change 3 on master"
+    12	echo "change 4 on master"
+
+[gekun@gekun first_trial]$ cat -n second.sh 
+     1	echo "change1 on master"
+     2	echo "change2 on master"
+     3	echo "change3 on master"
+     4	echo "change4 on master"
+     5	echo "change5 on master"
+
+[gekun@gekun first_trial]$ git checkout ch3
+Switched to branch 'ch3'
+
+# change first.sh twice, in order to excercise rebase while meeting conflicts
+[gekun@gekun first_trial]$ git commit -a -m "change 3 on first.sh on ch3"
+[gekun@gekun first_trial]$ git commit -a -m "change 4 on first.sh on ch3"
+
+[gekun@gekun first_trial]$ git log --oneline --decorate --graph --all -6
+* 3e9afcb (HEAD, ch3) change 4 on first.sh on ch3
+* a2a90d6 change 3 on first.sh on ch3
+| * 216f8e3 (master) change 5 on second.sh on master
+| * 62f3375 change 4 on first.sh on master
+| * 474f26a change 3 on first.sh on master
+|/  
+* 99fdfb3 (origin/master, origin/HEAD) change on ch3, again
+
+[gekun@gekun first_trial]$ cat -n first.sh 
+     1	echo "hello world"
+     2	
+     3	echo "change something else after the first line"
+     4	
+     5	echo "make anohter change on master branch, again"
+     6	
+     7	echo "merge change 1/2 for master and ch3"
+     8	
+     9	echo "merge change for master and ch3, again"
+    10	
+    11	echo "change 3 on first.sh on ch3"
+    12	echo "change 4 on first.sh on ch3"
+
+[gekun@gekun first_trial]$ cat -n second.sh 
+     1	echo "change1 on master"
+     2	echo "change2 on master"
+     3	echo "change3 on master"
+     4	echo "change4 on master"
+
+[gekun@gekun first_trial]$ git branch
+* ch3
+  master
+
+# rebase: re(change) base to [216f8e3 (master) change 5 on second.sh on master]
+# then replay commits on ch3 again, in the commit order:
+#     a2a90d6 change 3 on first.sh on ch3
+#     3e9afcb (HEAD, ch3) change 4 on first.sh on ch3
+# meet conflict when applying a2a90d6 change 3 on first.sh on ch3 
+[gekun@gekun first_trial]$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: change 3 on first.sh on ch3
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging first.sh
+CONFLICT (content): Merge conflict in first.sh
+Failed to merge in the changes.
+Patch failed at 0001 change 3 on first.sh on ch3
+
+When you have resolved this problem run "git rebase --continue".
+If you would prefer to skip this patch, instead run "git rebase --skip".
+To restore the original branch and stop rebasing run "git rebase --abort".
+
+# (no branch), a temporary branch?
+[gekun@gekun first_trial]$ git branch
+* (no branch)
+  ch3
+  master
+
+# conflict introduced while applying a2a90d6 change 3 on first.sh on ch3
+[gekun@gekun first_trial]$ cat -n first.sh 
+     1	echo "hello world"
+     2	
+     3	echo "change something else after the first line"
+     4	
+     5	echo "make anohter change on master branch, again"
+     6	
+     7	echo "merge change 1/2 for master and ch3"
+     8	
+     9	echo "merge change for master and ch3, again"
+    10	
+    11	<<<<<<< HEAD
+    12	echo "change 3 on master"
+    13	echo "change 4 on master"
+    14	=======
+    15	echo "change 3 on first.sh on ch3"
+    16	>>>>>>> change 3 on first.sh on ch3
+
+# second.sh has already been rebased since there is no conflict
+[gekun@gekun first_trial]$ cat -n second.sh 
+     1	echo "change1 on master"
+     2	echo "change2 on master"
+     3	echo "change3 on master"
+     4	echo "change4 on master"
+     5	echo "change5 on master"
+
+# try to resolve conflict in first.sh
+[gekun@gekun first_trial]$ cat -n first.sh 
+     1	echo "hello world"
+     2	
+     3	echo "change something else after the first line"
+     4	
+     5	echo "make anohter change on master branch, again"
+     6	
+     7	echo "merge change 1/2 for master and ch3"
+     8	
+     9	echo "merge change for master and ch3, again"
+    10	
+    11	echo "merge change for master and ch3, again*2"
+
+# no need to commit
+[gekun@gekun first_trial]$ git add .
+
+# continue to rebase after resolving the first conflict, and.. meet another
+# one while applying 3e9afcb (HEAD, ch3) change 4 on first.sh on ch3 
+[gekun@gekun first_trial]$ git rebase --continue
+Applying: change 3 on first.sh on ch3
+Applying: change 4 on first.sh on ch3
+Using index info to reconstruct a base tree...
+Falling back to patching base and 3-way merge...
+Auto-merging first.sh
+CONFLICT (content): Merge conflict in first.sh
+Failed to merge in the changes.
+Patch failed at 0002 change 4 on first.sh on ch3
+
+Change first.sh again...must? interesting...
+
+# try to resolve...
+[gekun@gekun first_trial]$ cat first.sh 
+echo "hello world"
+
+echo "change something else after the first line"
+
+echo "make anohter change on master branch, again"
+
+echo "merge change 1/2 for master and ch3"
+
+echo "merge change for master and ch3, again"
+
+echo "merge change for master and ch3, again*3"
+
+[gekun@gekun first_trial]$ git add .
+
+# rebase again, and succeeds.
+[gekun@gekun first_trial]$ git rebase --continue
+Applying: change 4 on first.sh on ch3
+
+[gekun@gekun first_trial]$ git branch
+* ch3
+  master
+
+[gekun@gekun first_trial]$ git log --oneline --decorate --graph --all -6
+* 6ef9308 (HEAD, ch3) change 4 on first.sh on ch3
+* 1d32cd9 change 3 on first.sh on ch3
+* 216f8e3 (master) change 5 on second.sh on master
+* 62f3375 change 4 on first.sh on master
+* 474f26a change 3 on first.sh on master
+* 99fdfb3 (origin/master, origin/HEAD) change on ch3, again
+
+[gekun@gekun first_trial]$ git checkout master
+[gekun@gekun first_trial]$ git merge ch3
+Updating 216f8e3..6ef9308
+Fast-forward
+ first.sh |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+[gekun@gekun first_trial]$ git log --oneline --decorate --graph --all -6
+* 6ef9308 (HEAD, master, ch3) change 4 on first.sh on ch3
+* 1d32cd9 change 3 on first.sh on ch3
+* 216f8e3 change 5 on second.sh on master
+* 62f3375 change 4 on first.sh on master
+* 474f26a change 3 on first.sh on master
+* 99fdfb3 (origin/master, origin/HEAD) change on ch3, again
