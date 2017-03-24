@@ -4,4 +4,4 @@ echo "change something else after the first line"
 
 echo "make anohter change on master branch, again"
 
-echo "resolve conflicts for rebase"
+echo "change 1 for ch3"
